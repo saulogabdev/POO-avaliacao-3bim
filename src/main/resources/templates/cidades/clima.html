@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head th:replace="~{fragments :: head('Clima em ' + ${cidade.nomeExibicao})}"></head>
+<body>
+<header th:replace="~{fragments :: menu}"></header>
+<main>
+    <h1 th:text="'Clima em ' + ${cidade.nomeExibicao}">Clima</h1>
+    <p class="observacao" th:if="${cidade.observacao}" th:text="${cidade.observacao}"></p>
+
+    <div th:replace="~{fragments :: mensagens}"></div>
+
+    <div th:if="${clima}">
+        <section th:replace="~{fragments :: clima(${clima}, ${previsoes})}"></section>
+    </div>
+
+    <p><a class="botao secundario" th:href="@{/cidades}">&larr; Voltar</a></p>
+</main>
+</body>
+</html>

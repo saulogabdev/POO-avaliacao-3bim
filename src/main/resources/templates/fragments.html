@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head th:fragment="head(titulo)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${titulo} + ' | Clima'">Clima</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<header th:fragment="menu">
+    <nav class="menu">
+        <a class="logo" th:href="@{/clima}">&#9925; Clima</a>
+        <a th:href="@{/clima}">Buscar clima</a>
+        <a th:href="@{/cidades}">Minhas cidades</a>
+        <a th:href="@{/cidades/nova}">Cadastrar cidade</a>
+    </nav>
+</header>
+
+<div th:fragment="mensagens">
+    <p class="alerta sucesso" th:if="${mensagem}" th:text="${mensagem}"></p>
+    <p class="alerta erro" th:if="${erro}" th:text="${erro}"></p>
+</div>
+
+<!-- Cartão com o clima atual e a previsão (dados vindos da API) -->
+<section th:fragment="clima(clima, previsoes)" class="clima">
+    <div class="card atual">
+        <div class="topo">
+            <img th:src="${clima.iconeUrl}" th:alt="${clima.descricao}">
+            <div>
+                <h2 th:text="${clima.cidade} + ', ' + ${clima.pais}">Cidade</h2>
+                <p class="descricao" th:text="${clima.descricao}">descrição</p>
+            </div>
+            <p class="temp" th:text="${#numbers.formatDecimal(clima.temperatura, 1, 0)} + ' °C'">20 °C</p>
+        </div>
+        <ul class="detalhes">
+            <li>Sensação térmica <strong th:text="${#numbers.formatDecimal(clima.sensacaoTermica, 1, 0)} + ' °C'"></strong></li>
+            <li>Mín / Máx <strong th:text="${#numbers.formatDecimal(clima.temperaturaMinima, 1, 0)} + ' / ' + ${#numbers.formatDecimal(clima.temperaturaMaxima, 1, 0)} + ' °C'"></strong></li>
+            <li>Umidade <strong th:text="${clima.umidade} + '%'"></strong></li>
+            <li>Vento <strong th:text="${#numbers.formatDecimal(clima.ventoKmh, 1, 0)} + ' km/h'"></strong></li>
+        </ul>
+        <p class="dica" th:text="${clima.recomendacao}">dica</p>
+    </div>
+
+    <div th:if="${previsoes != null and !previsoes.isEmpty()}">
+        <h3>Próximos dias</h3>
+        <div class="previsoes">
+            <div class="card dia" th:each="p : ${previsoes}">
+                <p class="data" th:text="${#temporals.format(p.dataHora, 'EEE dd/MM')}">seg 01/01</p>
+                <img th:src="${p.iconeUrl}" th:alt="${p.descricao}">
+                <p class="temp-dia" th:text="${#numbers.formatDecimal(p.temperatura, 1, 0)} + ' °C'">20 °C</p>
+                <p class="descricao" th:text="${p.descricao}">descrição</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+</body>
+</html>
