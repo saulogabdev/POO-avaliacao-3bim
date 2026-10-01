@@ -1,5 +1,6 @@
 package ifpr.edu.br.weather.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,11 +17,19 @@ public class Cidade {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String nome;  
-    private String pais;       
-    private String apelido;     
-    private String observacao; 
-    
+    @Column(nullable = false, length = 100)
+    private String nome;
+
+    @Column(length = 2)
+    private String pais;
+
+    @Column(length = 50)
+    private String apelido;
+
+    @Column(length = 500)
+    private String observacao;
+
+    @Column(updatable = false)
     private LocalDateTime dataCadastro;
 
     public Cidade() {
@@ -73,6 +82,26 @@ public class Cidade {
 
     public void setObservacao(String observacao) {
         this.observacao = observacao;
+    }
+
+    /**
+     * Texto usado para consultar a API do OpenWeatherMap (ex.: "Curitiba,BR").
+     */
+    public String getConsulta() {
+        if (pais == null || pais.isBlank()) {
+            return nome;
+        }
+        return nome + "," + pais;
+    }
+
+    /**
+     * Nome mostrado na tela: o apelido, se existir, senão o nome da cidade.
+     */
+    public String getNomeExibicao() {
+        if (apelido == null || apelido.isBlank()) {
+            return nome;
+        }
+        return apelido;
     }
 
     public LocalDateTime getDataCadastro() {

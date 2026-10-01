@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head th:replace="~{fragments :: head(${cidade.id == null} ? 'Nova cidade' : 'Editar cidade')}"></head>
+<body>
+<header th:replace="~{fragments :: menu}"></header>
+<main>
+    <h1 th:text="${cidade.id == null} ? 'Nova cidade' : 'Editar cidade'">Cidade</h1>
+    <div th:replace="~{fragments :: mensagens}"></div>
+
+    <form class="formulario" th:action="@{/cidades/salvar}" th:object="${cidade}" method="post">
+        <input type="hidden" th:field="*{id}">
+
+        <label for="nome">Nome da cidade *</label>
+        <input type="text" id="nome" th:field="*{nome}" maxlength="100" required>
+
+        <label for="pais">País (código de 2 letras, ex.: BR)</label>
+        <input type="text" id="pais" th:field="*{pais}" maxlength="2">
+
+        <label for="apelido">Apelido</label>
+        <input type="text" id="apelido" th:field="*{apelido}" maxlength="50" placeholder="Ex.: Casa da vó">
+
+        <label for="observacao">Observação</label>
+        <textarea id="observacao" th:field="*{observacao}" maxlength="500" rows="3"></textarea>
+
+        <div class="acoes">
+            <button type="submit">Salvar</button>
+            <a class="botao secundario" th:href="@{/cidades}">Cancelar</a>
+        </div>
+    </form>
+</main>
+</body>
+</html>
